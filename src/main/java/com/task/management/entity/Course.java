@@ -19,12 +19,15 @@ public class Course {
   @Column
   private String status;
 
-  Course() {
+  public Course() {
+
   }
 
-  Course(String name, String status) {
-    this.status = status;
+  public Course(int id, String name, String status, String description) {
+    this.id = id;
     this.name = name;
+    this.description = description;
+    this.status = status;
   }
 
   public int getId() {

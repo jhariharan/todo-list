@@ -1,13 +1,26 @@
 package com.task.management;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
-@SpringBootTest
+import com.task.management.controller.TodoListController;
+import com.task.management.repositories.CourseRepository;
+
+@RunWith(MockitoJUnitRunner.class)
 class TodoListApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+  @InjectMocks
+  TodoListController todoListController;
+
+  @Mock
+  CourseRepository courseRepository;
+
+  @Test
+  void contextLoads() {
+    //
+  }
 
 }

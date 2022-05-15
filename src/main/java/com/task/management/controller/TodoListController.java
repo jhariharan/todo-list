@@ -11,33 +11,33 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.task.management.entity.Course;
-import com.task.management.service.CourseService;
+import com.task.management.errors.CourseNotFoundException;
+import com.task.management.repositories.CourseRepository;
 
 @RestController
 public class TodoListController {
 
   @Autowired
-  private CourseService courseService;
+  private CourseRepository courseRepository;
 
 
-  @GetMapping("/course")
+  @GetMapping("/courses")
   private List<Course> getAllCourses() {
-    return courseService.getAllCourses();
+    return courseRepository.findAll();
   }
 
   @GetMapping("/course/{id}")
   private Course getCourseById(@PathVariable("id") int id) {
-    return courseService.getCoursById(id);
+    return courseRepository.findById(id).orElseThrow(() -> new CourseNotFoundException(id));
   }
 
   @PostMapping("/course")
-  private int addOrUpdateCourse(@RequestBody Course course) {
-    courseService.saveOrUpdateCourse(course);
-    return course.getId();
+  private Course addCourse(@RequestBody Course newCourse) {
+    return courseRepository.save(newCourse);
   }
 
   @DeleteMapping("/course/{id}")
-  private void deleteCourse(@PathVariable("id") int id){
-    courseService.deleteCourse(id);
+  private void deleteCourse(@PathVariable("id") int id) {
+    courseRepository.deleteById(id);
   }
 }
