@@ -1,5 +1,6 @@
 package com.task.management.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,14 +43,20 @@ public class TodoListController {
   }
 
   @PutMapping("/api/tasks/{id}")
-  public void updateTask(@PathVariable("id") Long id, @Valid @NotNull @RequestBody Task task) {
-    taskService.getTaskById(id).orElseThrow(() -> new TaskNotFoundException(id));
-    taskService.updateTask(task);
+  public Task updateTask(@PathVariable("id") Long id, @Valid @NotNull @RequestBody Task updatedTask) {
+
+    return taskService.getTaskById(id)
+        .map(x -> {
+          x.setCreateDate(new Date());
+          x.setDescription(updatedTask.getDescription());
+          x.setName(updatedTask.getName());
+          x.setCompleted(updatedTask.getCompleted());
+          return taskService.updateTask(x);
+        }).orElseThrow(() -> new TaskNotFoundException(id));
   }
 
   @DeleteMapping("/api/tasks/{id}")
   public void deleteTaskById(@PathVariable("id") Long id) {
-    taskService.getTaskById(id).orElseThrow(() -> new TaskNotFoundException(id));
     taskService.deleteTask(id);
   }
 
