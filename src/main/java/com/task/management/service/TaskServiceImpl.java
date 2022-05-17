@@ -1,8 +1,9 @@
 package com.task.management.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.validation.constraints.NotNull;
 
@@ -20,9 +21,7 @@ public class TaskServiceImpl implements TaskService {
 
   @Override
   public List<Task> getAllTasks() {
-    List<Task> tasks = new ArrayList<>();
-    taskRepository.findAll().forEach(task -> tasks.add(task));
-    return tasks;
+    return StreamSupport.stream(taskRepository.findAll().spliterator(), false).collect(Collectors.toList());
   }
 
   @Override

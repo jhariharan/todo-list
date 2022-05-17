@@ -8,6 +8,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,7 +45,7 @@ public class TodoListController {
   }
 
   @PutMapping("/api/tasks/{id}")
-  public Task updateTask(@PathVariable("id") Long id, @Valid @NotNull @RequestBody Task updatedTask) {
+  public ResponseEntity<Task> updateTask(@PathVariable("id") Long id, @Valid @NotNull @RequestBody Task updatedTask) {
 
     return taskService.getTaskById(id)
         .map(x -> {
@@ -51,13 +53,15 @@ public class TodoListController {
           x.setDescription(updatedTask.getDescription());
           x.setName(updatedTask.getName());
           x.setCompleted(updatedTask.getCompleted());
-          return taskService.updateTask(x);
+          Task newUpdateTask = taskService.updateTask(x);
+          return new ResponseEntity<>(newUpdateTask, HttpStatus.OK);
         }).orElseThrow(() -> new TaskNotFoundException(id));
   }
 
   @DeleteMapping("/api/tasks/{id}")
-  public void deleteTaskById(@PathVariable("id") Long id) {
+  public ResponseEntity<String> deleteTaskById(@PathVariable("id") Long id) {
     taskService.deleteTask(id);
+    return new ResponseEntity<>("Task deleted successfully", HttpStatus.OK);
   }
 
   @DeleteMapping("/api/tasks")

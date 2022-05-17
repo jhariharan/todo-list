@@ -56,13 +56,12 @@
 			<artifactId>todomvc-app-css</artifactId>
 			<version>2.4.1</version>
 		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
 
-	</dependencies>
+  </dependencies>
 
 	<build>
 		<plugins>
