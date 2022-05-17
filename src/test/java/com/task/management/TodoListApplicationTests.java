@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.task.management.controller.TodoListController;
-import com.task.management.repositories.CourseRepository;
+import com.task.management.repositories.TaskRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 class TodoListApplicationTests {
@@ -16,7 +16,7 @@ class TodoListApplicationTests {
   TodoListController todoListController;
 
   @Mock
-  CourseRepository courseRepository;
+  TaskRepository taskRepository;
 
   @Test
   void contextLoads() {
