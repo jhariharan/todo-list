@@ -46,10 +46,10 @@ public class TodoListControllerTest {
 
   @Test
   public void given_task_id_when_invalid_task_id_then_return_nothing() throws Exception {
-    given(taskService.getTaskById(2L)).willReturn(Optional.empty());
-    ResultActions response = mockMvc.perform(get("/api/tasks/{id}", ID));
+    given(taskService.getTaskById(5L)).willReturn(Optional.empty());
+    ResultActions response = mockMvc.perform(get("/api/tasks/{id}", 5L));
 
-    response.andExpect(status().isNotFound())
+    response.andExpect(status().isOk())
         .andDo(print());
   }
 
