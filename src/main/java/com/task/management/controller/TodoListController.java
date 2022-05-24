@@ -2,7 +2,6 @@ package com.task.management.controller;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -10,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +23,7 @@ import com.task.management.errors.TaskNotFoundException;
 import com.task.management.service.TaskService;
 
 @RestController
+@Validated
 public class TodoListController {
 
   @Autowired
@@ -40,13 +41,16 @@ public class TodoListController {
   }
 
   @GetMapping("/api/tasks/{id}")
-  public Optional<Task> getTaskById(@PathVariable("id") Long id) {
-    return taskService.getTaskById(id);
+  public ResponseEntity<Task> getTaskById(@PathVariable("id") int id) {
+    return taskService.getTaskById(id)
+        .map(x -> {
+          Task getTask = taskService.updateTask(x);
+          return new ResponseEntity<>(getTask, HttpStatus.OK);
+        }).orElseThrow(() -> new TaskNotFoundException(id));
   }
 
   @PutMapping("/api/tasks/{id}")
-  public ResponseEntity<Task> updateTask(@PathVariable("id") Long id, @Valid @NotNull @RequestBody Task updatedTask) {
-
+  public ResponseEntity<Task> updateTask(@PathVariable int id, @Valid @NotNull @RequestBody Task updatedTask) {
     return taskService.getTaskById(id)
         .map(x -> {
           x.setCreateDate(new Date());
@@ -59,7 +63,7 @@ public class TodoListController {
   }
 
   @DeleteMapping("/api/tasks/{id}")
-  public ResponseEntity<String> deleteTaskById(@PathVariable("id") Long id) {
+  public ResponseEntity<String> deleteTaskById(@PathVariable("id") int id) {
     taskService.deleteTask(id);
     return new ResponseEntity<>("Task deleted successfully", HttpStatus.OK);
   }

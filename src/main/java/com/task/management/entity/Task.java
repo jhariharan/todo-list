@@ -12,6 +12,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 
 @Entity
 @Table
@@ -19,8 +22,8 @@ public class Task {
 
   @Id
   @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
   @Column
   private String name;
 
@@ -37,11 +40,11 @@ public class Task {
 //
   }
 
-  public Long getId() {
+  public int getId() {
     return id;
   }
 
-  public void setId(final Long id) {
+  public void setId(final int id) {
     this.id = id;
   }
 
@@ -88,27 +91,32 @@ public class Task {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+
+    if (!(o instanceof Task)) {
       return false;
     }
 
-    Task task = (Task) o;
+    final Task that = (Task) o;
 
-    if (id != null ? !id.equals(task.id) : task.id != null) {
-      return false;
-    }
-    if (description != null ? !description.equals(task.description) : task.description != null) {
-      return false;
-    }
-    return completed != null ? completed.equals(task.completed) : task.completed == null;
+    return new EqualsBuilder()
+        .append(getName(), that.getName())
+        .append(getCompleted(), that.getCompleted())
+        .append(getDescription(), that.getDescription())
+        .isEquals();
   }
 
   @Override
   public int hashCode() {
-    int result = id != null ? id.hashCode() : 0;
+    int result = Integer.valueOf(id).hashCode();
     result = 31 * result + (description != null ? description.hashCode() : 0);
     result = 31 * result + (completed != null ? completed.hashCode() : 0);
+    result = 31 * result + (name != null ? name.hashCode() : 0);
     return result;
+  }
+
+  @Override
+  public String toString() {
+    return ReflectionToStringBuilder.toString(this);
   }
 }
 

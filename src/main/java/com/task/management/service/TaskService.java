@@ -12,13 +12,13 @@ public interface TaskService {
 
   List<Task> getAllTasks();
 
-  Optional<Task> getTaskById(Long id);
+  Optional<Task> getTaskById(int id);
 
   Task addTask(@NotNull Task task);
 
   Task updateTask(@NotNull Task task);
 
-  void deleteTask(Long id);
+  void deleteTask(int id);
 
   void deleteAllTasks();
 
