@@ -39,7 +39,7 @@ public class TodoListController {
   }
 
   @GetMapping("/api/tasks/{id}")
-  public ResponseEntity<Task> getTaskById(@PathVariable("id") int id) {
+  public ResponseEntity<Task> getTaskById(@PathVariable("id") int id) throws TaskNotFoundException {
     return taskService.getTaskById(id)
         .map(x -> {
           Task getTask = taskService.updateTask(x);
@@ -48,7 +48,7 @@ public class TodoListController {
   }
 
   @PutMapping("/api/tasks/{id}")
-  public ResponseEntity<Task> updateTask(@PathVariable int id, @Valid @NotNull @RequestBody Task updatedTask) {
+  public ResponseEntity<Task> updateTask(@PathVariable int id, @Valid @NotNull @RequestBody Task updatedTask) throws TaskNotFoundException {
     return taskService.getTaskById(id)
         .map(x -> {
           x.setCreateDate(new Date());
